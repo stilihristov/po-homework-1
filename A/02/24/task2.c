@@ -1,41 +1,86 @@
 #include <stdio.h>
 #include <string.h>
-#define MAXARRSIZE 400
+#include <stdlib.h>
+#define WORD 200
+#define MAX 3000
 
-char *find(char *,char );
+struct occurance_t
+{
+	long hash;
+	int count;
+
+};
+
+long hash(char *word);
 
 int main()
 {
-	int result;
-	char input_array[MAXARRSIZE], searched;
-	
-	fgets(input_array, MAXARRSIZE + 1, stdin);
-	scanf("%c",&searched);
+	int i = 0,j,k,result,max = 0;
+	char arr[MAX];
+	struct occurance_t word[MAX];
 
-	if(find(input_array, searched) != NULL)
+	for(i = 0; i < MAX; i++)
 	{
-		result = find(input_array, searched) - input_array;
-		printf("%d",result);
+		word[i].hash=0;
+		word[i].count=0;
 	}
-	
-	else 
-		printf("-1");
 
+
+	do
+	{
+	scanf("%s",arr);
+	result = hash(arr);
+	
+	for(j=0; j<MAX; j++)
+		{
+			if(word[j].hash == result)
+			{
+				word[j].count++;
+
+				break;
+			}
+			else if(word[j].hash == 0)
+			{
+				word[j].hash=result;
+
+				word[j].count=1;
+
+				break;
+			}
+		}
+
+	i++;
+	}while(strcmp(arr,"vsmisal")!= 0);
+	
+		
+	for(j = 0; j < i; j++)
+     {
+    	if(word[j].count > max)
+   	   {
+       	     max=word[j].count;
+
+             k=j;
+        }
+	   
+	   
+     }
+
+
+	printf("%d %ld",word[k].count,word[k].hash);
 	return 0;
 }
 
-char *find(char *haystack,char needle)
+long hash(char *word)
 {
-	int i;
-	char *ptr = NULL;
-	for(i = 0;i < strlen(haystack); i++)
+	int i,len;
+	long asc = 42;
+	
+	len = strlen(word) - 1;
+	
+	for(i = 0; i <= len ; i++)
 	{
-		if(needle == haystack[i])
-		{
-			ptr = &haystack[i];
-			break;
-		}
+		asc +=   word[i] * (i + 1);
 	}
 
-	return ptr;
+	return asc;
 }
